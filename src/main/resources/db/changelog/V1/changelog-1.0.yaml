@@ -1,0 +1,119 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Anastasia
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+              - column:
+                  name: address
+                  type: varchar(500)
+
+        - createTable:
+            tableName: dishes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: smallint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dish_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: varchar(10)
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: pieces
+                  type: integer
+
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_customer_id
+                    referencedTableName: customers
+                    references: customers(id)
+              - column:
+                  name: order_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: order_dishes
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_order_dishes_order_id
+                    referencedTableName: orders
+                    references: orders(id)
+              - column:
+                  name: dish_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_order_dishes_dish_id
+                    referencedTableName: dishes
+                    references: dishes(id)
+            constraints:
+              primaryKey:
+                columnNames: order_id, dish_id
+                constraintName: pk_order_dishes
